@@ -1,0 +1,19 @@
+# Node dependencies & build outputs
+node_modules/
+dist/
+build/
+*.log
+
+# .NET & C# Build outputs
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE & OS temporary files
+.vs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
