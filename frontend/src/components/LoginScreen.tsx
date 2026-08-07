@@ -114,7 +114,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                     ? 'bg-[#080a14] border border-white/10 focus:border-[#ffd600] text-white placeholder-slate-500'
                     : 'bg-slate-50 border border-slate-300 focus:border-[#ffd600] text-slate-900 placeholder-slate-400'
                 }`}
-                placeholder="Enter username (e.g. RAGHAV)"
+                placeholder="Enter username"
               />
             </div>
           </div>

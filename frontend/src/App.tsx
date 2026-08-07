@@ -20,8 +20,8 @@ import { MOCK_USERS, MOCK_TICKETS, MOCK_NOTIFICATIONS, MOCK_AUDIT_LOGS, MOCK_DEP
 
 export function App() {
   const [darkMode, setDarkMode] = useState<boolean>(true);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
-  const [currentUser, setCurrentUser] = useState<User>(MOCK_USERS[0]); // ADMIN by default
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [globalSearchQuery, setGlobalSearchQuery] = useState<string>('');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
@@ -259,7 +259,7 @@ export function App() {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !currentUser) {
     return (
       <LoginScreen
         onLogin={handleLogin}
@@ -269,12 +269,14 @@ export function App() {
     );
   }
 
+  const user = currentUser;
+
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-[#020408] text-slate-900 dark:text-white font-sans transition-colors duration-300">
       
       {/* Responsive Left Sidebar Drawer */}
       <Sidebar
-        currentUser={currentUser}
+        currentUser={user}
         activeTab={activeTab}
         onTabChange={(tab) => {
           if (tab === 'create-ticket') {
@@ -298,7 +300,7 @@ export function App() {
         onNavigate={setActiveTab}
         darkMode={darkMode}
         onToggleDarkMode={() => setDarkMode(!darkMode)}
-        currentUser={currentUser}
+        currentUser={user}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
       />
@@ -308,7 +310,7 @@ export function App() {
         
         {activeTab === 'dashboard' && (
           <DashboardView
-            currentUser={currentUser}
+            currentUser={user}
             tickets={tickets}
             onOpenRaiseTicket={() => setIsRaiseModalOpen(true)}
             onSelectTicket={(t) => setSelectedTicket(t)}
@@ -321,7 +323,7 @@ export function App() {
             tickets={activeTab === 'approvals' ? tickets.filter(t => t.status === 'Pending Approval') : tickets}
             onSelectTicket={(t) => setSelectedTicket(t)}
             onOpenRaiseTicket={() => setIsRaiseModalOpen(true)}
-            currentUserRole={currentUser.role}
+            currentUserRole={user.role}
             searchQuery={globalSearchQuery}
           />
         )}
@@ -380,7 +382,7 @@ export function App() {
         )}
 
         {activeTab === 'profile' && (
-          <ProfileView currentUser={currentUser} />
+          <ProfileView currentUser={user} />
         )}
 
         {activeTab === 'settings' && (
@@ -394,8 +396,8 @@ export function App() {
         isOpen={isRaiseModalOpen}
         onClose={() => setIsRaiseModalOpen(false)}
         onSubmitTicket={handleCreateTicket}
-        currentUserRole={currentUser.role}
-        currentUserName={currentUser.fullName}
+        currentUserRole={user.role}
+        currentUserName={user.fullName}
       />
 
       <TicketDetailModal
@@ -405,8 +407,8 @@ export function App() {
         onRejectTicket={handleRejectTicket}
         onRequestInfo={handleRequestInfo}
         onAddComment={handleAddComment}
-        currentUserRole={currentUser.role}
-        currentUserName={currentUser.fullName}
+        currentUserRole={user.role}
+        currentUserName={user.fullName}
       />
 
       <NotificationsDrawer

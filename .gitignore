@@ -5,6 +5,7 @@
 .env.staging
 backend/.env
 frontend/.env
+backend/appsettings.json
 
 # Node dependencies & build outputs
 node_modules/
