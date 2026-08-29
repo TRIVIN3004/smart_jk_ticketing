@@ -1,5 +1,5 @@
-import React from 'react';
-import { Search, Bell, User as UserIcon, Sun, Moon, Menu, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Bell, User as UserIcon, Sun, Moon, Menu, X, RefreshCw } from 'lucide-react';
 import type { User } from '../types';
 
 interface HeaderProps {
@@ -13,6 +13,7 @@ interface HeaderProps {
   currentUser: User;
   isMobileSidebarOpen: boolean;
   onToggleMobileSidebar: () => void;
+  onRefreshData?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -24,8 +25,11 @@ export const Header: React.FC<HeaderProps> = ({
   darkMode,
   onToggleDarkMode,
   isMobileSidebarOpen,
-  onToggleMobileSidebar
+  onToggleMobileSidebar,
+  onRefreshData
 }) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const getTabTitle = (tab: string) => {
     switch (tab) {
       case 'dashboard': return 'Operations Overview';
@@ -42,6 +46,14 @@ export const Header: React.FC<HeaderProps> = ({
       case 'settings': return 'System Settings';
       default: return 'Portal';
     }
+  };
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    if (onRefreshData) {
+      onRefreshData();
+    }
+    setTimeout(() => setIsRefreshing(false), 600);
   };
 
   return (
@@ -77,6 +89,15 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Actions */}
       <div className="flex items-center space-x-2 md:space-x-3">
         
+        {/* Refresh Data Button */}
+        <button
+          onClick={handleRefresh}
+          className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-slate-100 dark:bg-[#0a0c12] border border-slate-200 dark:border-white/10 hover:border-[#ffd600] text-slate-600 dark:text-slate-300 hover:text-[#ffd600] flex items-center justify-center transition-all cursor-pointer shadow-sm"
+          title="Refresh Data & Sync across tabs"
+        >
+          <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#ffd600]' : ''}`} />
+        </button>
+
         {/* Theme Toggle */}
         <button
           onClick={onToggleDarkMode}

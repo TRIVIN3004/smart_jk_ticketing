@@ -480,7 +480,7 @@ INSERT INTO dbo.TicketCategories (CategoryCode, CategoryName, Description, SlaHo
 
 -- Users (Configured credentials matching enterprise matrix)
 INSERT INTO dbo.Users (Username, Email, PasswordHash, FullName, Phone, RoleId, DepartmentId, PlantLocation) VALUES
-('admin', 'admin@jktyre.com', 'Admin@123', 'Rajesh Sharma (Master Admin)', '+91 98765 43210', 1, 4, 'Chennai Plant 1'),
+('admin', 'admin@jktyre.com', '`Admin@123`', 'Rajesh Sharma (Master Admin)', '+91 98765 43210', 1, 4, 'Chennai Plant 1'),
 ('RAGHAV', 'raghav@jktyre.com', 'jk@12345', 'Raghavan M (JK Manager)', '+91 98765 43211', 2, 1, 'Chennai Plant 1'),
 ('JEYAPRAKASH', 'jeyaprakash.mgr@jktyre.com', 'jk@12345', 'Jeyaprakash K (JK Manager)', '+91 98765 43212', 2, 2, 'Kankroli Plant'),
 ('RAHUL', 'rahul@smartcontrols.com', 'smart@123', 'Rahul S (Smart Manager)', '+91 98765 43213', 3, 3, 'Mysore Plant'),
