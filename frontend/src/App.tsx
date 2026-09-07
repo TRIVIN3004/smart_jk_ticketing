@@ -17,9 +17,18 @@ import { TicketDetailModal } from './components/TicketDetailModal';
 
 import type { User, Ticket, UserRole, NotificationItem, AuditLogItem, DepartmentItem, CategoryItem } from './types';
 import { MOCK_USERS, MOCK_TICKETS, MOCK_NOTIFICATIONS, MOCK_AUDIT_LOGS, MOCK_DEPARTMENTS, MOCK_CATEGORIES } from './mockData';
-
 export function App() {
-  const [darkMode, setDarkMode] = useState<boolean>(true);
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    try {
+      const savedTheme = localStorage.getItem('smart_jk_theme') || localStorage.getItem('theme');
+      if (savedTheme !== null) {
+        return savedTheme === 'dark';
+      }
+      return true;
+    } catch {
+      return true;
+    }
+  });
   
   // Auth state - Persisted in localStorage to prevent logging out on page refresh
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
@@ -124,6 +133,11 @@ export function App() {
 
       const savedCats = localStorage.getItem('smart_jk_categories');
       if (savedCats) setCategories(JSON.parse(savedCats));
+
+      const savedTheme = localStorage.getItem('smart_jk_theme') || localStorage.getItem('theme');
+      if (savedTheme !== null) {
+        setDarkMode(savedTheme === 'dark');
+      }
     } catch (err) {
       console.error('Data sync error:', err);
     }
@@ -157,7 +171,7 @@ export function App() {
     }
 
     const handleStorageEvent = (e: StorageEvent) => {
-      if (e.key && e.key.startsWith('smart_jk_')) {
+      if (e.key && (e.key.startsWith('smart_jk_') || e.key === 'theme')) {
         syncDataFromStorage();
       }
     };
@@ -170,12 +184,16 @@ export function App() {
     };
   }, [syncDataFromStorage]);
 
-  // Apply dark mode class to HTML root element
+  // Apply dark mode class to HTML root element & persist preference in localStorage
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
+      localStorage.setItem('smart_jk_theme', 'dark');
+      localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      localStorage.setItem('smart_jk_theme', 'light');
+      localStorage.setItem('theme', 'light');
     }
   }, [darkMode]);
 

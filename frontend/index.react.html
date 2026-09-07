@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SMART CONTROLS — Ticket Management System</title>
+    <!-- Prevent theme flash: apply theme class before first paint based on saved preference -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('smart_jk_theme') || localStorage.getItem('theme');
+          var isDark = saved !== null ? saved === 'dark' : true;
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.backgroundColor = '#020408';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.backgroundColor = '#f1f5f9';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      html.dark { background-color: #020408; }
+      html:not(.dark) { background-color: #f1f5f9; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
